@@ -1,6 +1,6 @@
 # 🍱 NEXTBITE
 
-SmartFood AI is a food-surplus redistribution platform that connects **kitchens** with surplus food to **NGOs**, coordinates pickup through **delivery partners**, and uses lightweight **AI/ML** to assess food freshness and recommend the nearest NGO for a donation.
+NextBite is a food-surplus redistribution platform that connects **kitchens** with surplus food to **NGOs**, coordinates pickup through **delivery partners**, and uses lightweight **AI/ML** to assess food freshness and recommend the nearest NGO for a donation.
 
 ---
 
@@ -34,7 +34,7 @@ SmartFood AI is a food-surplus redistribution platform that connects **kitchens*
 ## 📁 Project Structure
 
 ```
-smart-food-ai/
+NextBite/
 ├── app.js                     # Express app setup, middleware, routes
 ├── server.js                  # Entry point
 ├── config/
