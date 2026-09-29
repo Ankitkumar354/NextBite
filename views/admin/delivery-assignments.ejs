@@ -1,0 +1,189 @@
+<div class="container py-5">
+
+    <div class="mb-4">
+
+        <h1 class="fw-bold">
+            Delivery Assignments
+        </h1>
+
+        <p class="text-muted">
+            Assign approved food requests to delivery personnel.
+        </p>
+
+    </div>
+
+
+    <% if (requests.length === 0) { %>
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <div style="font-size: 3rem;">
+                    📦
+                </div>
+
+                <h5 class="fw-bold mt-3">
+                    No approved requests
+                </h5>
+
+                <p class="text-muted mb-0">
+                    Approved requests will appear here.
+                </p>
+
+            </div>
+
+        </div>
+
+    <% } else { %>
+
+
+        <div class="row g-4">
+
+            <% requests.forEach(request => { %>
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body">
+
+                            <span class="badge bg-success mb-3">
+                                Approved
+                            </span>
+
+
+                            <h5 class="fw-bold">
+
+                                <%= request.surplusFood?.foodName
+                                    || "Food" %>
+
+                            </h5>
+
+
+                            <p class="text-success fw-bold">
+
+                                <%= request.quantityRequested %>
+
+                                <%= request.surplusFood?.unit || "" %>
+
+                            </p>
+
+
+                            <hr>
+
+
+                            <p class="mb-2">
+
+                                <strong>
+                                    NGO:
+                                </strong>
+
+                                <br>
+
+                                <span class="text-muted">
+
+                                    <%= request.ngo?.organizationName
+                                        || request.ngo?.name
+                                        || "NGO" %>
+
+                                </span>
+
+                            </p>
+
+
+                            <p class="mb-3">
+
+                                <strong>
+                                    Pickup:
+                                </strong>
+
+                                <br>
+
+                                <span class="text-muted">
+
+                                    <%= request.surplusFood?.pickupAddress
+                                        || "Pickup location" %>
+
+                                </span>
+
+                            </p>
+
+
+                            <% if (deliveryUsers.length === 0) { %>
+
+                                <div class="alert alert-warning">
+
+                                    No delivery personnel registered.
+
+                                </div>
+
+                            <% } else { %>
+
+
+                                <form
+                                    action="/dashboard/admin/delivery-assignments/<%= request._id %>"
+                                    method="POST">
+
+
+                                    <label class="form-label fw-semibold">
+
+                                        Assign Delivery Person
+
+                                    </label>
+
+
+                                    <select
+                                        name="deliveryPersonId"
+                                        class="form-select mb-3"
+                                        required>
+
+                                        <option value="">
+                                            Select delivery person
+                                        </option>
+
+
+                                        <% deliveryUsers.forEach(delivery => { %>
+
+                                            <option
+                                                value="<%= delivery._id %>">
+
+                                                <%= delivery.name %>
+
+                                                <% if (delivery.city) { %>
+                                                    - <%= delivery.city %>
+                                                <% } %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary w-100">
+
+                                        🚚 Assign Delivery
+
+                                    </button>
+
+
+                                </form>
+
+                            <% } %>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    <% } %>
+
+</div>

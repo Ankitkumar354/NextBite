@@ -1,0 +1,172 @@
+.navbar.bg-success {
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.12);
+}
+
+.navbar-brand {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.navbar .nav-link {
+    position: relative;
+    margin: 0 4px;
+    font-weight: 500;
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #ffffff !important;
+    transform: translateY(-2px);
+}
+
+.navbar .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 3px;
+    width: 0;
+    height: 2px;
+    background: #ffffff;
+    border-radius: 10px;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.navbar .nav-link:hover::after {
+    width: 70%;
+}
+
+.navbar .nav-link {
+    position: relative;
+    margin: 0 4px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.92) !important;
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: #ffffff !important;
+    transform: translateY(-2px);
+}
+.nav-item i{
+    font-size: 1.5rem;
+     vertical-align: middle;
+}
+
+.nav-item {
+    font-size: 1rem;
+     vertical-align: middle;
+}
+
+.navbar .nav-link[title="Notifications"] span:first-child {
+  transition: transform 0.3s ease;
+}
+
+
+.navbar .nav-link[title="Notifications"]:hover span:first-child {
+    transform: rotate(-12deg) scale(1.1);
+}
+
+.navbar .nav-link[title="Notifications"] .badge {
+    border: 2px solid #198754;
+    animation: notificationPulse 2s infinite;
+}
+
+@keyframes notificationPulse {
+
+    0% {
+        transform: translate(50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(50%, -50%) scale(1.15);
+    }
+    100% {
+        transform: translate(50%, -50%) scale(1);
+    }
+}
+
+.navbar-text {
+    padding: 7px 13px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.10);
+    transition:
+        background 0.3s ease,
+        transform 0.3s ease;
+}
+ 
+.navbar-text:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
+}
+
+.navbar .btn {
+    border-radius: 20px;
+    font-weight: 600;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.navbar .btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 5px 14px rgba(0, 0, 0, 0.18);
+}
+
+
+.navbar-toggler {
+    border: none !important;
+    transition:
+        transform 0.3s ease,
+        background 0.3s ease;
+}
+
+.navbar-toggler:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: scale(1.05);
+}
+
+.navbar-toggler:focus {
+    box-shadow: none !important;
+}
+
+@media (max-width: 991px) {
+    .navbar .navbar-nav {
+        padding-top: 15px;
+        padding-bottom: 10px;
+    }
+
+    .navbar .nav-item {
+        margin-bottom: 4px;
+    }
+
+    .navbar .nav-link {
+        padding: 10px 12px !important;
+        border-radius: 8px;
+    }
+
+    .navbar .nav-link:hover {
+        background: rgba(255, 255, 255, 0.10);
+        transform: translateX(5px);
+    }
+
+    .navbar .nav-link::after {
+        display: none;
+    }
+
+    .navbar-text {
+        display: inline-block;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+}

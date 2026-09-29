@@ -1,0 +1,181 @@
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">
+            Food Requests
+        </h2>
+
+        <p class="text-muted">
+            Manage requests received from NGOs.
+        </p>
+    </div>
+
+
+    <% if (requests.length === 0) { %>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+
+                <div class="display-4 mb-3">
+                    📋
+                </div>
+
+                <h5 class="fw-bold">
+                    No food requests yet
+                </h5>
+
+                <p class="text-muted mb-0">
+                    NGO requests for your surplus food
+                    will appear here.
+                </p>
+
+            </div>
+        </div>
+
+    <% } else { %>
+
+
+        <div class="row g-4">
+
+            <% requests.forEach(request => { %>
+
+                <div class="col-md-6 col-xl-4">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between mb-3">
+
+                                <h5 class="fw-bold">
+                                    <%= request.surplusFood.foodName %>
+                                </h5>
+
+                                <% if (request.status === "pending") { %>
+
+                                    <span class="badge bg-warning text-dark">
+                                        Pending
+                                    </span>
+
+                                <% } else if (request.status === "approved") { %>
+
+                                    <span class="badge bg-success">
+                                        Approved
+                                    </span>
+
+                                <% } else if (request.status === "rejected") { %>
+
+                                    <span class="badge bg-danger">
+                                        Rejected
+                                    </span>
+
+                                <% } %>
+
+                            </div>
+
+
+                            <p class="mb-2">
+
+                                <strong>NGO:</strong><br>
+
+                                <%= request.ngo?.organizationName ||
+                                    request.ngo?.name ||
+                                    "NGO" %>
+
+                            </p>
+
+
+                            <p class="mb-2">
+
+                                <strong>Requested:</strong>
+
+                                <%= request.quantityRequested %>
+                                <%= request.surplusFood.unit %>
+
+                            </p>
+
+
+                            <p class="mb-2">
+
+                                <strong>City:</strong>
+
+                                <%= request.ngo?.city || "N/A" %>
+
+                            </p>
+
+
+                            <% if (request.message) { %>
+
+                                <div class="alert alert-light border small">
+
+                                    <strong>Message:</strong><br>
+
+                                    <%= request.message %>
+
+                                </div>
+
+                            <% } %>
+
+
+                            <small class="text-muted">
+                                Requested:
+                                <%= new Date(
+                                    request.requestedAt
+                                ).toLocaleString() %>
+                            </small>
+
+
+                            <% if (request.status === "pending") { %>
+
+                                <hr>
+
+                                <div class="d-flex gap-2">
+
+                                    <form
+                                        action="/dashboard/kitchen/requests/<%= request._id %>/approve"
+                                        method="POST"
+                                        class="flex-grow-1"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-success w-100"
+                                        >
+                                            ✓ Approve
+                                        </button>
+
+                                    </form>
+
+
+                                    <form
+                                        action="/dashboard/kitchen/requests/<%= request._id %>/reject"
+                                        method="POST"
+                                        class="flex-grow-1"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-outline-danger w-100"
+                                        >
+                                            ✕ Reject
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            <% } %>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    <% } %>
+
+</div>

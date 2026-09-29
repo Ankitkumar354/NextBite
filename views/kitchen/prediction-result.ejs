@@ -1,0 +1,479 @@
+<div class="container py-5">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1 class="fw-bold">
+                Demand Prediction
+            </h1>
+
+            <p class="text-muted">
+                Smart demand and surplus risk analysis.
+            </p>
+        </div>
+
+        <a
+            href="/dashboard/kitchen/prediction"
+            class="btn btn-outline-secondary">
+            ← Back
+        </a>
+
+    </div>
+
+
+    <% if (!prediction.hasHistory) { %>
+
+        <!-- NO HISTORY -->
+
+        <div class="alert alert-warning">
+
+            <h5 class="fw-bold">
+                Not Enough Historical Data
+            </h5>
+
+            <p class="mb-0">
+                Add more consumption records for
+                <strong>
+                    <%= foodName %>
+                </strong>
+                before generating a reliable prediction.
+            </p>
+
+        </div>
+
+
+    <% } else { %>
+
+
+        <!-- FOOD INFO -->
+
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <h3 class="fw-bold mb-1">
+                            <%= foodName %>
+                        </h3>
+
+                        <p class="text-muted mb-0">
+                            Expected Customers:
+                            <strong>
+                                <%= expectedCustomers %>
+                            </strong>
+                        </p>
+
+                    </div>
+
+
+                    <!-- RISK -->
+
+                    <div>
+
+                        <% if (prediction.surplusRisk === "high") { %>
+
+                            <span class="badge bg-danger fs-6 p-2">
+                                🔴 High Surplus Risk
+                            </span>
+
+                        <% } else if (prediction.surplusRisk === "medium") { %>
+
+                            <span class="badge bg-warning text-dark fs-6 p-2">
+                                🟡 Medium Surplus Risk
+                            </span>
+
+                        <% } else { %>
+
+                            <span class="badge bg-success fs-6 p-2">
+                                🟢 Low Surplus Risk
+                            </span>
+
+                        <% } %>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- PREDICTION CARDS -->
+        <!-- ================================= -->
+
+        <div class="row g-4">
+
+            <!-- HISTORY -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <p class="text-muted mb-1">
+                            Historical Records
+                        </p>
+
+                        <h2 class="fw-bold">
+                            <%= prediction.historicalRecords %>
+                        </h2>
+
+                        <small class="text-muted">
+                            Records used
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- AVERAGE -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <p class="text-muted mb-1">
+                            Average Consumption
+                        </p>
+
+                        <h2 class="fw-bold">
+                            <%= prediction.averageConsumption %>
+                        </h2>
+
+                        <small class="text-muted">
+                            Historical average
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DEMAND -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <p class="text-muted mb-1">
+                            Predicted Demand
+                        </p>
+
+                        <h2 class="fw-bold text-primary">
+                            <%= prediction.predictedDemand %>
+                        </h2>
+
+                        <small class="text-muted">
+                            Expected consumption
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PREPARATION -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <p class="text-muted mb-1">
+                            Recommended Preparation
+                        </p>
+
+                        <h2 class="fw-bold text-success">
+                            <%= prediction.recommendedPreparation %>
+                        </h2>
+
+                        <small class="text-muted">
+                            Suggested production
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- SURPLUS ANALYSIS -->
+        <!-- ================================= -->
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body p-4">
+
+                <h4 class="fw-bold mb-4">
+                    ♻️ Surplus Risk Analysis
+                </h4>
+
+                <div class="row g-4">
+
+                    <div class="col-md-6">
+
+                        <p class="text-muted mb-1">
+                            Expected Surplus
+                        </p>
+
+                        <h2 class="fw-bold text-warning">
+                            <%= prediction.expectedSurplus %>
+                        </h2>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <p class="text-muted mb-1">
+                            Surplus Percentage
+                        </p>
+
+                        <h2 class="fw-bold">
+                            <%= prediction.surplusPercentage %>%
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- RECOMMENDATION -->
+        <!-- ================================= -->
+
+        <div class="alert
+            <%= prediction.surplusRisk === 'high'
+                ? 'alert-danger'
+                : prediction.surplusRisk === 'medium'
+                    ? 'alert-warning'
+                    : 'alert-success' %>
+            mt-4">
+
+            <h5 class="fw-bold">
+                🤖 Smart Recommendation
+            </h5>
+
+            <p class="mb-0">
+                <%= prediction.recommendation %>
+            </p>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- CREATE SURPLUS PLAN -->
+        <!-- ================================= -->
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <div>
+
+                        <h4 class="fw-bold mb-1">
+                            📦 Create Surplus Plan
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            Create a planned surplus record based on this prediction.
+                        </p>
+
+                    </div>
+
+                    <span class="badge bg-primary">
+                        AI Prediction
+                    </span>
+
+                </div>
+
+
+                <form
+                    action="/dashboard/kitchen/prediction/surplus-plan"
+                    method="POST"
+                >
+
+                    <!-- FOOD NAME -->
+
+                    <input
+                        type="hidden"
+                        name="foodName"
+                        value="<%= foodName %>"
+                    >
+
+
+                    <!-- CATEGORY -->
+
+                    <input
+                        type="hidden"
+                        name="category"
+                        value="cooked_food"
+                    >
+
+
+                    <!-- CUSTOMERS -->
+
+                    <input
+                        type="hidden"
+                        name="expectedCustomers"
+                        value="<%= expectedCustomers %>"
+                    >
+
+
+                    <!-- PREDICTED DEMAND -->
+
+                    <input
+                        type="hidden"
+                        name="predictedDemand"
+                        value="<%= prediction.predictedDemand %>"
+                    >
+
+
+                    <!-- RECOMMENDED PREPARATION -->
+
+                    <input
+                        type="hidden"
+                        name="recommendedPreparation"
+                        value="<%= prediction.recommendedPreparation %>"
+                    >
+
+
+                    <!-- EXPECTED SURPLUS -->
+
+                    <input
+                        type="hidden"
+                        name="expectedSurplus"
+                        value="<%= prediction.expectedSurplus %>"
+                    >
+
+
+                    <!-- SURPLUS RISK -->
+
+                    <input
+                        type="hidden"
+                        name="surplusRisk"
+                        value="<%= prediction.surplusRisk %>"
+                    >
+
+
+                    <!-- UNIT -->
+
+                    <input
+                        type="hidden"
+                        name="unit"
+                        value="plates"
+                    >
+
+
+                    <!-- PLANNED DATE -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+                            Planned Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="plannedDate"
+                            class="form-control"
+                            min="<%= new Date().toISOString().split('T')[0] %>"
+                            required
+                        >
+
+                        <small class="text-muted">
+                            Select the date when this food is expected to be prepared.
+                        </small>
+
+                    </div>
+
+
+                    <!-- SUBMIT -->
+
+                    <button
+                        type="submit"
+                        class="btn btn-success px-4"
+                    >
+                        📦 Create Surplus Plan
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- EXPLANATION -->
+        <!-- ================================= -->
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold">
+                    How was this calculated?
+                </h5>
+
+                <ul class="text-muted mb-0">
+
+                    <li>
+                        Historical consumption average
+                    </li>
+
+                    <li>
+                        Recent consumption trend
+                    </li>
+
+                    <li>
+                        Expected customer count
+                    </li>
+
+                    <li>
+                        Special-event adjustment
+                    </li>
+
+                    <li>
+                        Small preparation safety buffer
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+
+    <% } %>
+
+</div>

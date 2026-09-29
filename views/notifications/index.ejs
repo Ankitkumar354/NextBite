@@ -1,0 +1,257 @@
+<div class="container py-5">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1 class="fw-bold mb-1">
+                🔔 Notifications
+            </h1>
+
+            <p class="text-muted mb-0">
+                Stay updated with your NextBite activities.
+            </p>
+        </div>
+
+        <% if (unreadCount > 0) { %>
+
+            <form
+                action="/notifications/read-all"
+                method="POST"
+            >
+                <button
+                    type="submit"
+                    class="btn btn-outline-primary"
+                >
+                    ✓ Mark All as Read
+                </button>
+            </form>
+
+        <% } %>
+
+    </div>
+
+
+    <!-- UNREAD COUNT -->
+
+    <% if (unreadCount > 0) { %>
+
+        <div class="alert alert-primary">
+
+            <strong>
+                <%= unreadCount %>
+            </strong>
+
+            unread notification<%= unreadCount === 1 ? "" : "s" %>.
+
+        </div>
+
+    <% } %>
+
+
+    <!-- NOTIFICATIONS -->
+
+    <% if (notifications.length === 0) { %>
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <div style="font-size: 4rem;">
+                    🔔
+                </div>
+
+                <h5 class="fw-bold mt-3">
+                    No Notifications
+                </h5>
+
+                <p class="text-muted mb-0">
+                    You don't have any notifications yet.
+                </p>
+
+            </div>
+
+        </div>
+
+    <% } else { %>
+
+
+        <div class="row g-3">
+
+            <% notifications.forEach(notification => { %>
+
+                <div class="col-12">
+
+                    <div
+                        class="card border-0 shadow-sm
+                        <%= notification.isRead
+                            ? ""
+                            : "border-start border-primary border-4" %>"
+                    >
+
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between align-items-start">
+
+                                <div class="d-flex gap-3">
+
+                                    <!-- ICON -->
+
+                                    <div
+                                        class="rounded-circle bg-light
+                                        d-flex align-items-center
+                                        justify-content-center"
+                                        style="
+                                            width:50px;
+                                            height:50px;
+                                            font-size:24px;
+                                        "
+                                    >
+
+                                        <% if (notification.type === "food_request") { %>
+
+                                            📦
+
+                                        <% } else if (notification.type === "request_approved") { %>
+
+                                            ✅
+
+                                        <% } else if (notification.type === "request_rejected") { %>
+
+                                            ❌
+
+                                        <% } else if (notification.type === "delivery_assigned") { %>
+
+                                            🚚
+
+                                        <% } else if (notification.type === "food_picked_up") { %>
+
+                                            📦
+
+                                        <% } else if (notification.type === "food_in_transit") { %>
+
+                                            🚚
+
+                                        <% } else if (notification.type === "food_delivered") { %>
+
+                                            🎉
+
+                                        <% } else if (notification.type === "surplus_published") { %>
+
+                                            🍱
+
+                                        <% } else { %>
+
+                                            🔔
+
+                                        <% } %>
+
+                                    </div>
+
+
+                                    <!-- CONTENT -->
+
+                                    <div>
+
+                                        <h5 class="fw-bold mb-1">
+
+                                            <%= notification.title %>
+
+                                        </h5>
+
+                                        <p class="text-muted mb-2">
+
+                                            <%= notification.message %>
+
+                                        </p>
+
+                                        <small class="text-muted">
+
+                                            <%= new Date(
+                                                notification.createdAt
+                                            ).toLocaleString() %>
+
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- STATUS -->
+
+                                <div>
+
+                                    <% if (!notification.isRead) { %>
+
+                                        <span class="badge bg-primary">
+                                            New
+                                        </span>
+
+                                    <% } else { %>
+
+                                        <span class="badge bg-secondary">
+                                            Read
+                                        </span>
+
+                                    <% } %>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ACTIONS -->
+
+                            <div class="mt-3 ms-5">
+
+                                <% if (!notification.isRead) { %>
+
+                                    <form
+                                        action="/notifications/<%= notification._id %>/read"
+                                        method="POST"
+                                        class="d-inline"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-outline-primary"
+                                        >
+                                            Mark as Read
+                                        </button>
+
+                                    </form>
+
+                                <% } %>
+
+
+                                <form
+                                    action="/notifications/<%= notification._id %>/delete"
+                                    method="POST"
+                                    class="d-inline"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm btn-outline-danger"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    <% } %>
+
+</div>

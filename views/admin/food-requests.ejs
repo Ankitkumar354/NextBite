@@ -1,0 +1,431 @@
+<div class="container py-5">
+
+    <!-- HEADER -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h1 class="fw-bold mb-1">
+                Food Requests
+            </h1>
+
+            <p class="text-muted mb-0">
+                Monitor food redistribution requests.
+            </p>
+
+        </div>
+
+
+        <a
+            href="/dashboard/admin"
+            class="btn btn-outline-secondary">
+
+            ← Dashboard
+
+        </a>
+
+    </div>
+
+
+    <!-- STATUS FILTER -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <form
+                method="GET"
+                action="/dashboard/admin/food-requests"
+                class="row g-3 align-items-end">
+
+                <div class="col-md-4">
+
+                    <label class="form-label fw-semibold">
+
+                        Request Status
+
+                    </label>
+
+
+                    <select
+                        name="status"
+                        class="form-select">
+
+                        <option
+                            value="all"
+                            <%= selectedStatus === "all"
+                                ? "selected"
+                                : "" %>>
+
+                            All Status
+
+                        </option>
+
+
+                        <option
+                            value="pending"
+                            <%= selectedStatus === "pending"
+                                ? "selected"
+                                : "" %>>
+
+                            Pending
+
+                        </option>
+
+
+                        <option
+                            value="approved"
+                            <%= selectedStatus === "approved"
+                                ? "selected"
+                                : "" %>>
+
+                            Approved
+
+                        </option>
+
+
+                        <option
+                            value="assigned"
+                            <%= selectedStatus === "assigned"
+                                ? "selected"
+                                : "" %>>
+
+                            Assigned
+
+                        </option>
+
+
+                        <option
+                            value="picked_up"
+                            <%= selectedStatus === "picked_up"
+                                ? "selected"
+                                : "" %>>
+
+                            Picked Up
+
+                        </option>
+
+
+                        <option
+                            value="in_transit"
+                            <%= selectedStatus === "in_transit"
+                                ? "selected"
+                                : "" %>>
+
+                            In Transit
+
+                        </option>
+
+
+                        <option
+                            value="delivered"
+                            <%= selectedStatus === "delivered"
+                                ? "selected"
+                                : "" %>>
+
+                            Delivered
+
+                        </option>
+
+
+                        <option
+                            value="rejected"
+                            <%= selectedStatus === "rejected"
+                                ? "selected"
+                                : "" %>>
+
+                            Rejected
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-auto">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        Filter
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- REQUESTS -->
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-body p-0">
+
+            <% if (requests.length === 0) { %>
+
+                <div class="text-center py-5">
+
+                    <div class="fs-1">
+                        📦
+                    </div>
+
+                    <h5 class="fw-bold mt-3">
+                        No requests found
+                    </h5>
+
+                    <p class="text-muted">
+                        No food requests match the selected filter.
+                    </p>
+
+                </div>
+
+
+            <% } else { %>
+
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>
+                                    Food
+                                </th>
+
+                                <th>
+                                    NGO
+                                </th>
+
+                                <th>
+                                    Kitchen
+                                </th>
+
+                                <th>
+                                    Quantity
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Delivery
+                                </th>
+
+                                <th>
+                                    Requested
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <% requests.forEach(request => { %>
+
+                                <tr>
+
+
+                                    <!-- FOOD -->
+
+                                    <td>
+
+                                        <div class="fw-semibold">
+
+                                            <%= request.surplusFood?.foodName
+                                                || "Food" %>
+
+                                        </div>
+
+                                        <small class="text-muted">
+
+                                            <%= request.surplusFood?.category
+                                                || "-" %>
+
+                                        </small>
+
+                                    </td>
+
+
+                                    <!-- NGO -->
+
+                                    <td>
+
+                                        <div class="fw-semibold">
+
+                                            <%= request.ngo?.organizationName
+                                                || request.ngo?.name
+                                                || "NGO" %>
+
+                                        </div>
+
+                                        <small class="text-muted">
+
+                                            <%= request.ngo?.city
+                                                || "-" %>
+
+                                        </small>
+
+                                    </td>
+
+
+                                    <!-- KITCHEN -->
+
+                                    <td>
+
+                                        <%= request.surplusFood?.kitchen?.organizationName
+                                            || request.surplusFood?.kitchen?.name
+                                            || "Kitchen" %>
+
+                                    </td>
+
+
+                                    <!-- QUANTITY -->
+
+                                    <td>
+
+                                        <strong>
+
+                                            <%= request.quantityRequested %>
+
+                                        </strong>
+
+                                        <%= request.surplusFood?.unit || "" %>
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        <% if (request.status === "pending") { %>
+
+                                            <span class="badge bg-warning text-dark">
+                                                Pending
+                                            </span>
+
+                                        <% } else if (request.status === "approved") { %>
+
+                                            <span class="badge bg-primary">
+                                                Approved
+                                            </span>
+
+                                        <% } else if (request.status === "assigned") { %>
+
+                                            <span class="badge bg-info text-dark">
+                                                Assigned
+                                            </span>
+
+                                        <% } else if (request.status === "picked_up") { %>
+
+                                            <span class="badge bg-secondary">
+                                                Picked Up
+                                            </span>
+
+                                        <% } else if (request.status === "in_transit") { %>
+
+                                            <span class="badge bg-info text-dark">
+                                                In Transit
+                                            </span>
+
+                                        <% } else if (request.status === "delivered") { %>
+
+                                            <span class="badge bg-success">
+                                                Delivered
+                                            </span>
+
+                                        <% } else if (request.status === "rejected") { %>
+
+                                            <span class="badge bg-danger">
+                                                Rejected
+                                            </span>
+
+                                        <% } else { %>
+
+                                            <span class="badge bg-dark">
+                                                <%= request.status %>
+                                            </span>
+
+                                        <% } %>
+
+                                    </td>
+
+
+                                    <!-- DELIVERY -->
+
+                                    <td>
+
+                                        <% if (request.deliveryPerson) { %>
+
+                                            <div class="fw-semibold">
+
+                                                <%= request.deliveryPerson.name %>
+
+                                            </div>
+
+                                            <small class="text-muted">
+
+                                                <%= request.deliveryPerson.phone
+                                                    || request.deliveryPerson.email %>
+
+                                            </small>
+
+                                        <% } else { %>
+
+                                            <span class="text-muted">
+
+                                                Not assigned
+
+                                            </span>
+
+                                        <% } %>
+
+                                    </td>
+
+
+                                    <!-- DATE -->
+
+                                    <td>
+
+                                        <small>
+
+                                            <%= new Date(
+                                                request.createdAt
+                                            ).toLocaleDateString() %>
+
+                                        </small>
+
+                                    </td>
+
+
+                                </tr>
+
+                            <% }) %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+</div>

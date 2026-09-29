@@ -1,0 +1,176 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top">
+    <div class="container">
+        <!-- BRAND -->
+
+       <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+    <img src="/images/icon.jpeg" alt="SmartFood AI Logo" style="height: 50px; width: 50px; object-fit: cover; border-radius: 80%;">
+    NextBite
+</a>
+
+
+        <!-- MOBILE TOGGLE -->
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+
+                <!-- HOME -->
+
+                <li class="nav-item">
+
+                    <a class="nav-link" href="/">
+                        Home
+                    </a>
+
+                </li>
+
+
+                <!-- ABOUT -->
+
+                <li class="nav-item">
+
+                    <a class="nav-link" href="/#about">
+                        About
+                    </a>
+
+                </li>
+
+
+                <!-- HOW IT WORKS -->
+
+                <li class="nav-item">
+
+                    <a class="nav-link" href="/how-it-works">
+                        How It Works
+                    </a>
+
+                </li>
+
+
+                <% if (currentUser) { %>
+
+
+                    <!-- DASHBOARD -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link" href="/dashboard">
+                            Dashboard
+                        </a>
+
+                    </li>
+
+
+                    <!-- NOTIFICATIONS -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link position-relative px-3" href="/notifications" title="Notifications">
+
+                            <span style="font-size: 1.25rem;">
+                               <i class="fa-solid fa-bell"></i>
+                            </span>
+
+
+                            <% if ( typeof unreadNotificationCount !=="undefined" && unreadNotificationCount> 0
+                                ) { %>
+
+                                <span class="position-absolute
+                                       top-0
+                                       start-100
+                                       translate-middle
+                                       badge
+                                       rounded-pill
+                                       bg-danger" style="font-size: 0.65rem;">
+
+                                    <%= unreadNotificationCount %>
+
+                                </span>
+
+                                <% } %>
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- USER NAME -->
+
+                    <li class="nav-item ms-lg-2">
+
+                        <a class="nav-link" href="/profile">
+
+                           <i class="fa-solid fa-circle-user"></i>
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- LOGOUT -->
+
+                    <li class="nav-item ms-lg-2">
+
+                        <form action="/auth/logout" method="POST" class="m-0">
+
+                            <button type="submit" class="btn btn-warning btn-sm px-3">
+
+                                Logout
+
+                            </button>
+
+                        </form>
+
+                    </li>
+
+
+                    <% } else { %>
+
+
+                        <!-- LOGIN -->
+
+                        <li class="nav-item ms-lg-2">
+
+                            <a class="btn btn-light btn-sm px-3" href="/login">
+
+                                Login
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- REGISTER -->
+
+                        <li class="nav-item ms-lg-2">
+
+                            <a class="btn btn-warning btn-sm px-3" href="/register">
+
+                                Register
+
+                            </a>
+
+                        </li>
+
+
+                        <% } %>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+
+</nav>

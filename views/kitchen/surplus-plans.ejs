@@ -1,0 +1,270 @@
+<div class="container py-5">
+
+    <!-- HEADER -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h1 class="fw-bold">
+                Surplus Plans
+            </h1>
+
+            <p class="text-muted mb-0">
+                AI-generated food surplus planning and redistribution.
+            </p>
+
+        </div>
+
+        <a href="/dashboard/kitchen" class="btn btn-outline-secondary">
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <% if (plans.length===0) { %>
+
+        <!-- EMPTY STATE -->
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <div class="fs-1 mb-3">
+                    📦
+                </div>
+
+                <h4 class="fw-bold">
+                    No Surplus Plans Yet
+                </h4>
+
+                <p class="text-muted">
+                    Generate an AI demand prediction and create a surplus plan.
+                </p>
+
+                <a href="/dashboard/kitchen/prediction" class="btn btn-primary">
+                    📊 Create Prediction
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <% } else { %>
+
+
+            <!-- PLAN CARDS -->
+
+            <div class="row g-4">
+
+                <% plans.forEach(plan=> { %>
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="card border-0 shadow-sm h-100">
+
+                            <div class="card-body p-4">
+
+                                <!-- TITLE -->
+
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+
+                                    <div>
+
+                                        <h4 class="fw-bold mb-1">
+                                            <%= plan.foodName %>
+                                        </h4>
+
+                                        <small class="text-muted">
+                                            <%= plan.category %>
+                                        </small>
+
+                                    </div>
+
+
+                                    <!-- STATUS -->
+
+                                    <% if (plan.status==="planned" ) { %>
+
+                                        <span class="badge bg-warning text-dark">
+                                            Planned
+                                        </span>
+
+                                        <% } else if (plan.status==="published" ) { %>
+
+                                            <span class="badge bg-success">
+                                                Published
+                                            </span>
+
+                                            <% } else { %>
+
+                                                <span class="badge bg-secondary">
+                                                    Cancelled
+                                                </span>
+
+                                                <% } %>
+
+                                </div>
+
+
+                                <!-- DATE -->
+
+                                <p class="mb-3">
+
+                                    📅
+
+                                    <strong>
+                                        <%= new Date(plan.plannedDate).toLocaleDateString() %>
+                                    </strong>
+
+                                </p>
+
+
+                                <!-- DATA -->
+
+                                <div class="row g-2 mb-3">
+
+                                    <div class="col-6">
+
+                                        <div class="bg-light rounded p-2">
+
+                                            <small class="text-muted d-block">
+                                                Customers
+                                            </small>
+
+                                            <strong>
+                                                <%= plan.expectedCustomers %>
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-6">
+
+                                        <div class="bg-light rounded p-2">
+
+                                            <small class="text-muted d-block">
+                                                Demand
+                                            </small>
+
+                                            <strong>
+                                                <%= plan.predictedDemand %>
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-6">
+
+                                        <div class="bg-light rounded p-2">
+
+                                            <small class="text-muted d-block">
+                                                Preparation
+                                            </small>
+
+                                            <strong>
+                                                <%= plan.recommendedPreparation %>
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-6">
+
+                                        <div class="bg-light rounded p-2">
+
+                                            <small class="text-muted d-block">
+                                                Expected Surplus
+                                            </small>
+
+                                            <strong class="text-warning">
+                                                <%= plan.expectedSurplus %>
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- RISK -->
+
+                                <div class="mb-3">
+
+                                    <small class="text-muted">
+                                        Surplus Risk
+                                    </small>
+
+                                    <div class="mt-1">
+
+                                        <% if (plan.surplusRisk==="high" ) { %>
+
+                                            <span class="badge bg-danger">
+                                                🔴 High
+                                            </span>
+
+                                            <% } else if (plan.surplusRisk==="medium" ) { %>
+
+                                                <span class="badge bg-warning text-dark">
+                                                    🟡 Medium
+                                                </span>
+
+                                                <% } else { %>
+
+                                                    <span class="badge bg-success">
+                                                        🟢 Low
+                                                    </span>
+
+                                                    <% } %>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- PUBLISH -->
+
+                                <% if (plan.status==="planned" ) { %>
+
+                                    <form action="/dashboard/kitchen/surplus-plans/<%= plan._id %>/publish"
+                                        method="POST" onsubmit="return confirm('Publish this surplus food to NGOs?');">
+                                        <button type="submit" class="btn btn-success w-100">
+                                            🚀 Publish to NGO
+                                        </button>
+                                    </form>
+
+                                    <small class="text-muted d-block text-center mt-2">
+                                        This will make the surplus available for NGO requests.
+                                    </small>
+
+                                    <% } else { %>
+
+                                        <button class="btn btn-outline-success w-100" disabled>
+                                            ✓ Already Published
+                                        </button>
+
+                                        <% } %>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <% }) %>
+
+            </div>
+
+
+            <% } %>
+
+</div>

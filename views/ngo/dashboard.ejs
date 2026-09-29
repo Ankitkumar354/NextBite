@@ -1,0 +1,492 @@
+<div class="container py-5">
+
+    <!-- ============================= -->
+    <!-- HEADER -->
+    <!-- ============================= -->
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1 class="fw-bold mb-1">
+                NGO Dashboard
+            </h1>
+
+            <p class="text-muted mb-0">
+                Find available surplus food and request food for redistribution.
+            </p>
+        </div>
+
+        <span class="badge bg-success fs-6 px-3 py-2 mt-3 mt-md-0">
+            NGO
+        </span>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- STATS -->
+    <!-- ============================= -->
+
+    <div class="row g-4 mb-5">
+
+        <!-- AVAILABLE FOOD -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Available Food</p>
+                    <h2 class="fw-bold text-success mb-0"><%= stats?.availableFood || 0 %></h2>
+                    <small class="text-muted">Food available for request</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- MY REQUESTS -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1">My Requests</p>
+                    <h2 class="fw-bold mb-0"><%= stats?.totalRequests || 0 %></h2>
+                    <small class="text-muted">Total food requests</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- APPROVED / ACTIVE -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Active Requests</p>
+                    <h2 class="fw-bold text-warning mb-0"><%= stats?.approvedRequests || 0 %></h2>
+                    <small class="text-muted">Approved / In delivery</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPLETED -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Completed</p>
+                    <h2 class="fw-bold text-primary mb-0"><%= stats?.completedRequests || 0 %></h2>
+                    <small class="text-muted">Successfully delivered</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================= -->
+    <!-- AVAILABLE SURPLUS -->
+    <!-- ============================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3 class="fw-bold mb-1">Available Surplus Food</h3>
+            <p class="text-muted mb-0">Food currently available for redistribution.</p>
+        </div>
+    </div>
+
+
+    <div class="row g-4">
+
+        <% if (!surplusFoods || surplusFoods.length===0) { %>
+
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-3" style="font-size: 3rem;">🍱</div>
+                        <h5 class="fw-bold">No surplus food available</h5>
+                        <p class="text-muted mb-0">Check again later for new food donations.</p>
+                    </div>
+                </div>
+            </div>
+
+        <% } %>
+
+        <% if (surplusFoods && surplusFoods.length > 0) { %>
+
+            <% surplusFoods.forEach(food => { %>
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <!-- Food Image -->
+                            <% if (food.image && food.image.url) { %>
+                                <img src="<%= food.image.url %>" alt="<%= food.foodName %>" class="w-100 mb-3"
+                                    style="height: 180px; object-fit: cover; border-radius: 8px;">
+                            <% } else { %>
+                                <div class="d-flex align-items-center justify-content-center mb-3 bg-light"
+                                    style="height: 180px; border-radius: 8px; font-size: 2.5rem;">
+                                    🍱
+                                </div>
+                            <% } %>
+
+                            <!-- Food Header -->
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="fw-bold mb-0"><%= food.foodName %></h5>
+                                <span class="badge bg-success">Available</span>
+                            </div>
+
+                            <!-- Category -->
+                            <p class="text-muted text-capitalize mb-3">
+                                <%= food.category ? food.category.replaceAll("_", " ") : "Food" %>
+                            </p>
+
+                            <!-- Quantity -->
+                            <div class="mb-3">
+                                <small class="text-muted">Available Quantity</small>
+                                <h3 class="fw-bold text-success mb-0">
+                                    <%= food.quantity %> <%= food.unit %>
+                                </h3>
+                            </div>
+
+                            <!-- ✅ AI QUALITY VERIFIER CARD ✅ -->
+                            <div class="p-3 mb-3 rounded border <%= food.qualityStatus === 'Fresh' ? 'bg-success-subtle border-success' : food.qualityStatus === 'Spoiled / Compost' ? 'bg-danger-subtle border-danger' : 'bg-warning-subtle border-warning' %>">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <small class="fw-bold"><i class="fa-solid fa-robot me-1"></i> AI Freshness Check</small>
+                                    <span class="badge <%= food.qualityStatus === 'Fresh' ? 'bg-success' : food.qualityStatus === 'Spoiled / Compost' ? 'bg-danger' : 'bg-warning text-dark' %>">
+                                        <%= food.qualityStatus || 'Pending Analysis' %>
+                                    </span>
+                                </div>
+
+                                <% if (food.shelfLifeHours !== null && food.shelfLifeHours !== undefined) { %>
+                                    <div class="small text-muted d-flex justify-content-between mb-1">
+                                        <span>Est. Shelf-life:</span>
+                                        <strong class="text-dark"><%= food.shelfLifeHours %> hrs</strong>
+                                    </div>
+                                <% } %>
+
+                                <% if (food.aiConfidence) { %>
+                                    <div class="small text-muted d-flex justify-content-between">
+                                        <span>Model Confidence:</span>
+                                        <strong class="text-dark"><%= (food.aiConfidence * 100).toFixed(0) %>%</strong>
+                                    </div>
+                                <% } %>
+                            </div>
+
+                            <hr>
+
+                            <!-- Kitchen -->
+                            <p class="mb-2">
+                                <strong>Kitchen:</strong>
+                                <br>
+                                <span class="text-muted">
+                                    <%= food.kitchen?.organizationName || food.kitchen?.name || "Kitchen" %>
+                                </span>
+                            </p>
+
+                            <!-- City -->
+                            <p class="mb-2">
+                                <strong>City:</strong>
+                                <span class="text-muted"><%= food.city %></span>
+                            </p>
+
+                            <!-- Pickup Address -->
+                            <p class="mb-2">
+                                <strong>Pickup Address:</strong>
+                                <br>
+                                <span class="text-muted"><%= food.pickupAddress %></span>
+                            </p>
+
+                            <!-- Pickup Deadline -->
+                            <p class="mb-3">
+                                <strong>Pickup Before:</strong>
+                                <br>
+                                <span class="text-muted">
+                                    <%= new Date(food.pickupDeadline).toLocaleString() %>
+                                </span>
+                            </p>
+
+                            <!-- Description -->
+                            <% if (food.description) { %>
+                                <div class="mb-3">
+                                    <small class="text-muted"><%= food.description %></small>
+                                </div>
+                            <% } %>
+
+                            <!-- Request Button -->
+                            <div class="mt-auto">
+                                <button type="button" class="btn btn-success w-100"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#requestModal<%= food._id %>">
+                                     Request Food
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ================================= -->
+                <!-- REQUEST MODAL (per food, stays inside loop) -->
+                <!-- ================================= -->
+
+                <div class="modal fade" id="requestModal<%= food._id %>" tabindex="-1"
+                    aria-labelledby="requestModalLabel<%= food._id %>" aria-hidden="true">
+
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+                        <div class="modal-content">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <div>
+                                    <h5 class="modal-title fw-bold" id="requestModalLabel<%= food._id %>">
+                                        Request Food
+                                    </h5>
+                                    <small class="text-muted"><%= food.foodName %></small>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <!-- Request Form -->
+                            <form action="/dashboard/ngo/request/<%= food._id %>" method="POST">
+
+                                <div class="modal-body">
+
+                                    <!-- Food Information -->
+                                    <div class="alert alert-light border">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <strong>Food:</strong>
+                                                <br>
+                                                <%= food.foodName %>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <strong>Available:</strong>
+                                                <br>
+                                                <span class="text-success fw-bold">
+                                                    <%= food.quantity %> <%= food.unit %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3">
+
+                                        <!-- Quantity Requested -->
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Quantity Requested</label>
+                                            <input type="number" name="quantityRequested" class="form-control"
+                                                min="1" max="<%= food.quantity %>" step="0.1"
+                                                placeholder="Enter quantity" required>
+                                            <small class="text-muted">
+                                                Maximum: <%= food.quantity %> <%= food.unit %>
+                                            </small>
+                                        </div>
+
+                                        <!-- Pickup Location -->
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Pickup Location</label>
+                                            <input type="text" class="form-control"
+                                                value="<%= food.pickupAddress %>" readonly>
+                                        </div>
+
+                                        <!-- Message -->
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold">Message</label>
+                                            <textarea name="message" class="form-control" rows="4"
+                                                placeholder="Tell the kitchen how this food will be used..."></textarea>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Modal Footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                         Send Food Request
+                                    </button>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        <% } %>
+
+    </div><!-- row g-4 khatam -->
+
+
+    <!-- ================================= -->
+    <!-- MY REQUESTS / TRACKING (ab loop ke bahar, sirf 1 baar render hoga) -->
+    <!-- ================================= -->
+
+    <div class="mt-5">
+        <div class="mb-4">
+            <h3 class="fw-bold mb-1"><i class="bi bi-box-seam me-1"></i> My Food Requests</h3>
+            <p class="text-muted mb-0">Track your food requests and delivery status.</p>
+        </div>
+
+        <% if (!myRequests || myRequests.length===0) { %>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-5">
+                    <div style="font-size: 3rem;"><i class="bi bi-box-seam"></i></div>
+                    <h5 class="fw-bold mt-3">No requests yet</h5>
+                    <p class="text-muted mb-0">Your food requests will appear here.</p>
+                </div>
+            </div>
+
+        <% } else { %>
+
+            <div class="row g-4">
+
+                <% myRequests.forEach(request => { %>
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="card border-0 shadow-sm h-100">
+
+                            <div class="card-body">
+
+                                <!-- FOOD -->
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="fw-bold mb-0">
+                                        <%= request.surplusFood?.foodName || "Food" %>
+                                    </h5>
+
+                                    <span class="badge
+                                        <%= request.status === "pending" ? "bg-warning text-dark" :
+                                            request.status === "approved" ? "bg-success" :
+                                            request.status === "assigned" ? "bg-primary" :
+                                            request.status === "picked_up" ? "bg-info text-dark" :
+                                            request.status === "in_transit" ? "bg-primary" :
+                                            request.status === "delivered" ? "bg-success" :
+                                            request.status === "rejected" ? "bg-danger"
+                                            : "bg-secondary" %>">
+                                        <%= request.status.replaceAll("_", " ") %>
+                                    </span>
+                                </div>
+
+                                <!-- QUANTITY -->
+                                <p class="mb-2">
+                                    <strong>Requested:</strong>
+                                    <%= request.quantityRequested %> <%= request.surplusFood?.unit || "" %>
+                                </p>
+
+                                <!-- KITCHEN -->
+                                <p class="mb-2">
+                                    <strong>Kitchen:</strong>
+                                    <%= request.surplusFood?.kitchen?.organizationName ||
+                                        request.surplusFood?.kitchen?.name || "Kitchen" %>
+                                </p>
+
+                                <!-- LOCATION -->
+                                <p class="mb-3">
+                                    <strong>Pickup:</strong>
+                                    <br>
+                                    <span class="text-muted">
+                                        <%= request.surplusFood?.pickupAddress || "Pickup location" %>
+                                    </span>
+                                </p>
+
+                                <hr>
+
+                                <!-- DELIVERY STATUS -->
+                                <h6 class="fw-bold mb-3">Delivery Status</h6>
+
+                                <div class="mb-3">
+
+                                    <!-- PENDING -->
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="me-2">
+                                            <%= ["pending","approved","assigned","picked_up","in_transit","delivered"].indexOf(request.status) >= 0 ? "✅" : "⚪" %>
+                                        </span>
+                                        <small>Request Submitted</small>
+                                    </div>
+
+                                    <!-- APPROVED -->
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="me-2">
+                                            <%= ["approved","assigned","picked_up","in_transit","delivered"].indexOf(request.status) >= 0 ? "✅" : "⚪" %>
+                                        </span>
+                                        <small>Kitchen Approved</small>
+                                    </div>
+
+                                    <!-- ASSIGNED -->
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="me-2">
+                                            <%= ["assigned","picked_up","in_transit","delivered"].indexOf(request.status) >= 0 ? "✅" : "⚪" %>
+                                        </span>
+                                        <small>Delivery Person Assigned</small>
+                                    </div>
+
+                                    <!-- PICKED UP -->
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="me-2">
+                                            <%= ["picked_up","in_transit","delivered"].indexOf(request.status) >= 0 ? "✅" : "⚪" %>
+                                        </span>
+                                        <small>Food Picked Up</small>
+                                    </div>
+
+                                    <!-- IN TRANSIT -->
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="me-2">
+                                            <%= ["in_transit","delivered"].indexOf(request.status) >= 0 ? "✅" : "⚪" %>
+                                        </span>
+                                        <small>In Transit</small>
+                                    </div>
+
+                                    <!-- DELIVERED -->
+                                    <div class="d-flex align-items-center">
+                                        <span class="me-2">
+                                            <%= request.status === "delivered" ? "✅" : "⚪" %>
+                                        </span>
+                                        <small>Delivered</small>
+                                    </div>
+
+                                </div>
+
+                                <!-- DELIVERY PERSON -->
+                                <% if (request.deliveryPerson) { %>
+                                    <div class="alert alert-light border mb-0">
+                                        <strong><i class="bi bi-truck"></i> &nbsp; Delivery Person</strong>
+                                        <br>
+                                        <span class="text-muted"><%= request.deliveryPerson.name %></span>
+                                        <% if (request.deliveryPerson.phone) { %>
+                                            <br>
+                                            <small class="text-muted"><i class="bi bi-telephone"></i> <%= request.deliveryPerson.phone %></small>
+                                        <% } %>
+                                    </div>
+                                <% } else if (request.status === "approved") { %>
+                                    <div class="alert alert-warning mb-0">
+                                       <i class="bi bi-hourglass-split"></i> Waiting for delivery assignment.
+                                    </div>
+                                <% } %>
+
+                                <!-- REQUEST DATE -->
+                                <p class="text-muted small mt-3 mb-0">
+                                    Requested on: <%= new Date(request.createdAt).toLocaleString() %>
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+</div>

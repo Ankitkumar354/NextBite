@@ -1,0 +1,316 @@
+<div class="container py-5">
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
+    <div class="mb-4">
+
+        <h1 class="fw-bold mb-1">
+            👤 My Profile
+        </h1>
+
+        <p class="text-muted mb-0">
+            View and manage your NextBite AI profile.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <!-- =================================
+             PROFILE OVERVIEW
+        ================================== -->
+
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body text-center p-4">
+
+                    <!-- PROFILE ICON -->
+
+                    <div
+                        class="bg-success-subtle
+                               text-success
+                               rounded-circle
+                               d-flex
+                               align-items-center
+                               justify-content-center
+                               mx-auto mb-3"
+                        style="width:100px;height:100px;font-size:42px;">
+
+                        👤
+
+                    </div>
+
+
+                    <h4 class="fw-bold mb-1">
+
+                        <%= user.name %>
+
+                    </h4>
+
+
+                    <p class="text-muted mb-3">
+
+                        <%= user.email %>
+
+                    </p>
+
+
+                    <!-- ROLE -->
+
+                    <span class="badge bg-success px-3 py-2">
+
+                        <%= user.role %>
+
+                    </span>
+
+
+                    <hr class="my-4">
+
+
+                    <!-- ACCOUNT STATUS -->
+
+                    <div class="text-start">
+
+                        <div class="d-flex justify-content-between mb-3">
+
+                            <span class="text-muted">
+                                Account
+                            </span>
+
+                            <% if (user.isActive) { %>
+
+                                <span class="badge bg-success">
+                                    Active
+                                </span>
+
+                            <% } else { %>
+
+                                <span class="badge bg-danger">
+                                    Inactive
+                                </span>
+
+                            <% } %>
+
+                        </div>
+
+
+                        <div class="d-flex justify-content-between">
+
+                            <span class="text-muted">
+                                Verification
+                            </span>
+
+                            <% if (user.isVerified) { %>
+
+                                <span class="badge bg-primary">
+                                    Verified
+                                </span>
+
+                            <% } else { %>
+
+                                <span class="badge bg-warning text-dark">
+                                    Not Verified
+                                </span>
+
+                            <% } %>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             PROFILE DETAILS
+        ================================== -->
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-4">
+                        Profile Information
+                    </h4>
+
+
+                    <form
+                        action="/profile/update"
+                        method="POST">
+
+
+                        <div class="row g-3">
+
+
+                            <!-- NAME -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label fw-semibold">
+                                    Full Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="name"
+                                    class="form-control"
+                                    value="<%= user.name || '' %>"
+                                    required>
+
+                            </div>
+
+
+                            <!-- EMAIL -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label fw-semibold">
+                                    Email
+                                </label>
+
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    value="<%= user.email %>"
+                                    readonly>
+
+                                <small class="text-muted">
+                                    Email cannot be changed here.
+                                </small>
+
+                            </div>
+
+
+                            <!-- PHONE -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label fw-semibold">
+                                    Phone
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    class="form-control"
+                                    value="<%= user.phone || '' %>"
+                                    placeholder="Enter phone number">
+
+                            </div>
+
+
+                            <!-- ROLE -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label fw-semibold">
+                                    Role
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="form-control text-capitalize"
+                                    value="<%= user.role %>"
+                                    readonly>
+
+                                <small class="text-muted">
+                                    Role can only be managed by an administrator.
+                                </small>
+
+                            </div>
+
+
+                            <!-- ORGANIZATION -->
+
+                            <div class="col-12">
+
+                                <label class="form-label fw-semibold">
+                                    Organization Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="organizationName"
+                                    class="form-control"
+                                    value="<%= user.organizationName || '' %>"
+                                    placeholder="Enter organization name">
+
+                            </div>
+
+
+                            <!-- ADDRESS -->
+
+                            <div class="col-12">
+
+                                <label class="form-label fw-semibold">
+                                    Address
+                                </label>
+
+                                <textarea
+                                    name="address"
+                                    class="form-control"
+                                    rows="3"
+                                    placeholder="Enter address"><%= user.address || '' %></textarea>
+
+                            </div>
+
+
+                            <!-- CITY -->
+
+                            <div class="col-md-6">
+
+                                <label class="form-label fw-semibold">
+                                    City
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="city"
+                                    class="form-control"
+                                    value="<%= user.city || '' %>"
+                                    placeholder="Enter city">
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- BUTTON -->
+
+                        <div class="d-flex justify-content-end mt-4">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success px-4">
+
+                                💾 Save Changes
+
+                            </button>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

@@ -1,0 +1,402 @@
+<div class="container py-5">
+
+    <!-- HEADER -->
+
+    <div class="d-flex justify-content-between align-items-center mb-5">
+
+        <div>
+
+            <h1 class="fw-bold mb-1">
+                Admin Dashboard
+            </h1>
+
+            <p class="text-muted mb-0">
+                NextBite AI Management Center
+            </p>
+
+        </div>
+
+
+        <span class="badge bg-dark px-3 py-2 fs-6">
+            ADMIN
+        </span>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- STATISTICS -->
+    <!-- ================================= -->
+
+    <div class="row g-4 mb-5">
+
+
+        <!-- USERS -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <p class="text-muted mb-1">
+                        Total Users
+                    </p>
+
+                    <h2 class="fw-bold">
+                        <%= stats.totalUsers %>
+                    </h2>
+
+                    <small class="text-muted">
+                        Registered users
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- KITCHENS -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <p class="text-muted mb-1">
+                        Kitchens
+                    </p>
+
+                    <h2 class="fw-bold text-success">
+                        <%= stats.totalKitchens %>
+                    </h2>
+
+                    <small class="text-muted">
+                        Institutional kitchens
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NGOs -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <p class="text-muted mb-1">
+                        NGOs
+                    </p>
+
+                    <h2 class="fw-bold text-primary">
+                        <%= stats.totalNGOs %>
+                    </h2>
+
+                    <small class="text-muted">
+                        Redistribution partners
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DELIVERY -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <p class="text-muted mb-1">
+                        Delivery Partners
+                    </p>
+
+                    <h2 class="fw-bold text-warning">
+                        <%= stats.totalDelivery %>
+                    </h2>
+
+                    <small class="text-muted">
+                        Active delivery users
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- FOOD STATISTICS -->
+    <!-- ================================= -->
+
+    <div class="row g-4 mb-5">
+
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <p class="text-muted">
+                        Available Surplus
+                    </p>
+
+                    <h2 class="fw-bold text-success">
+                        <%= stats.availableSurplus %>
+                    </h2>
+
+                    <span class="text-muted">
+                        Active food listings
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <p class="text-muted">
+                        Pending Requests
+                    </p>
+
+                    <h2 class="fw-bold text-warning">
+                        <%= stats.pendingRequests %>
+                    </h2>
+
+                    <span class="text-muted">
+                        Awaiting kitchen approval
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <p class="text-muted">
+                        Approved Requests
+                    </p>
+
+                    <h2 class="fw-bold text-primary">
+                        <%= stats.approvedRequests %>
+                    </h2>
+
+                    <span class="text-muted">
+                        Ready for delivery
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <p class="text-muted">
+                        Delivered
+                    </p>
+
+                    <h2 class="fw-bold text-success">
+                        <%= stats.deliveredRequests %>
+                    </h2>
+
+                    <span class="text-muted">
+                        Successfully delivered
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- ADMIN ACTIONS -->
+    <!-- ================================= -->
+
+    <h3 class="fw-bold mb-4">
+        Quick Actions
+    </h3>
+
+
+    <div class="row g-4">
+
+
+        <!-- DELIVERY -->
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="fs-1 mb-3">
+                        🚚
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Delivery Assignments
+                    </h5>
+
+                    <p class="text-muted">
+                        Assign approved food requests
+                        to delivery personnel.
+                    </p>
+
+                    <a href="/dashboard/admin/delivery-assignments" class="btn btn-primary">
+
+                        Manage Deliveries
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- USERS -->
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="fs-1 mb-3">
+                        👥
+                    </div>
+
+                    <h5 class="fw-bold">
+                        User Management
+                    </h5>
+
+                    <p class="text-muted">
+                        Manage kitchens, NGOs,
+                        delivery partners and processing units.
+                    </p>
+
+                    <a href="/dashboard/admin/users" class="btn btn-primary">
+
+                        Manage Users
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ANALYTICS -->
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="fs-1 mb-3">
+                        📊
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Sustainability Analytics
+                    </h5>
+
+                    <p class="text-muted">
+                        Track food redistribution,
+                        waste prevention and impact.
+                    </p>
+
+                    <a href="/dashboard/admin/analytics" class="btn btn-success">
+
+                        View Analytics
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="fs-1 mb-3">
+                        📦
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Food Requests
+                    </h5>
+
+                    <p class="text-muted">
+                        Monitor NGO requests and
+                        redistribution status.
+                    </p>
+
+                    <a href="/dashboard/admin/food-requests" class="btn btn-primary">
+
+                        View Requests
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>

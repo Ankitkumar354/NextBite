@@ -1,0 +1,581 @@
+<div class="container py-5">
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h1 class="fw-bold mb-1">
+                🚚 Delivery Dashboard
+            </h1>
+
+            <p class="text-muted mb-0">
+                Manage your assigned food deliveries.
+            </p>
+
+        </div>
+
+        <span class="badge bg-primary fs-6 px-3 py-2">
+            Delivery
+        </span>
+
+    </div>
+
+
+    <!-- =========================================
+         STATS
+    ========================================== -->
+
+    <div class="row g-4 mb-5">
+
+        <!-- ACTIVE -->
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <p class="text-muted mb-1">
+                        Active Deliveries
+                    </p>
+
+                    <h2 class="fw-bold text-primary">
+                        <%= deliveries.filter(delivery =>
+                            ["assigned", "picked_up", "in_transit"]
+                            .includes(delivery.status)
+                        ).length %>
+                    </h2>
+
+                    <small class="text-muted">
+                        Currently assigned
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- COMPLETED -->
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <p class="text-muted mb-1">
+                        Completed
+                    </p>
+
+                    <h2 class="fw-bold text-success">
+                        <%= completedDeliveries %>
+                    </h2>
+
+                    <small class="text-muted">
+                        Successfully delivered
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL -->
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <p class="text-muted mb-1">
+                        Total Assignments
+                    </p>
+
+                    <h2 class="fw-bold">
+                        <%= deliveries.length %>
+                    </h2>
+
+                    <small class="text-muted">
+                        All assigned deliveries
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         DELIVERY SECTION
+    ========================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h3 class="fw-bold mb-0">
+            My Deliveries
+        </h3>
+
+        <span class="text-muted">
+            <%= deliveries.length %> delivery(s)
+        </span>
+
+    </div>
+
+
+    <% if (deliveries.length === 0) { %>
+
+        <!-- =====================================
+             EMPTY STATE
+        ====================================== -->
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <div style="font-size: 3.5rem;">
+                    🚚
+                </div>
+
+                <h5 class="fw-bold mt-3">
+                    No Deliveries Assigned
+                </h5>
+
+                <p class="text-muted mb-0">
+                    New delivery assignments will appear here.
+                </p>
+
+            </div>
+
+        </div>
+
+
+    <% } else { %>
+
+
+        <!-- =====================================
+             DELIVERY CARDS
+        ====================================== -->
+
+        <div class="row g-4">
+
+            <% deliveries.forEach(delivery => { %>
+
+                <div class="col-md-6 col-xl-4">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body p-4">
+
+
+                            <!-- =================================
+                                 FOOD HEADER
+                            ================================== -->
+
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+
+                                <div>
+
+                                    <h5 class="fw-bold mb-1">
+
+                                        <%= delivery.surplusFood?.foodName
+                                            || "Food" %>
+
+                                    </h5>
+
+                                    <small class="text-muted">
+
+                                        Food Redistribution
+
+                                    </small>
+
+                                </div>
+
+
+                                <!-- STATUS BADGE -->
+
+                                <% if (delivery.status === "assigned") { %>
+
+                                    <span class="badge bg-warning text-dark">
+                                        Assigned
+                                    </span>
+
+                                <% } else if (delivery.status === "picked_up") { %>
+
+                                    <span class="badge bg-info text-dark">
+                                        Picked Up
+                                    </span>
+
+                                <% } else if (delivery.status === "in_transit") { %>
+
+                                    <span class="badge bg-primary">
+                                        In Transit
+                                    </span>
+
+                                <% } else if (delivery.status === "delivered") { %>
+
+                                    <span class="badge bg-success">
+                                        Delivered
+                                    </span>
+
+                                <% } else { %>
+
+                                    <span class="badge bg-secondary">
+                                        <%= delivery.status
+                                            .replaceAll("_", " ") %>
+                                    </span>
+
+                                <% } %>
+
+                            </div>
+
+
+                            <!-- =================================
+                                 QUANTITY
+                            ================================== -->
+
+                            <div class="bg-light rounded p-3 mb-3">
+
+                                <small class="text-muted d-block">
+                                    Food Quantity
+                                </small>
+
+                                <span class="fs-4 fw-bold text-success">
+
+                                    <%= delivery.quantityRequested %>
+
+                                    <%= delivery.surplusFood?.unit
+                                        || "" %>
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- =================================
+                                 PICKUP
+                            ================================== -->
+
+                            <div class="mb-3">
+
+                                <p class="mb-1 fw-bold">
+                                    📍 Pickup Location
+                                </p>
+
+                                <p class="text-muted mb-0">
+
+                                    <%= delivery.surplusFood?.pickupAddress
+                                        || "Pickup location not available" %>
+
+                                </p>
+
+                            </div>
+
+
+                            <!-- =================================
+                                 NGO
+                            ================================== -->
+
+                            <div class="mb-3">
+
+                                <p class="mb-1 fw-bold">
+                                    🏢 Deliver To
+                                </p>
+
+                                <p class="text-muted mb-1">
+
+                                    <%= delivery.ngo?.organizationName
+                                        || delivery.ngo?.name
+                                        || "NGO" %>
+
+                                </p>
+
+                                <% if (delivery.ngo?.address) { %>
+
+                                    <small class="text-muted">
+
+                                        <%= delivery.ngo.address %>
+
+                                    </small>
+
+                                <% } %>
+
+                            </div>
+
+
+                            <!-- =================================
+                                 CITY
+                            ================================== -->
+
+                            <% if (
+                                delivery.ngo?.city ||
+                                delivery.surplusFood?.city
+                            ) { %>
+
+                                <div class="mb-3">
+
+                                    <small class="text-muted">
+
+                                        📌 City:
+                                        <strong>
+                                            <%= delivery.ngo?.city
+                                                || delivery.surplusFood?.city %>
+                                        </strong>
+
+                                    </small>
+
+                                </div>
+
+                            <% } %>
+
+
+                            <hr>
+
+
+                            <!-- =================================
+                                 DELIVERY TIMELINE
+                            ================================== -->
+
+                            <div class="mb-3">
+
+                                <small class="text-muted d-block mb-2">
+                                    Delivery Progress
+                                </small>
+
+
+                                <div class="d-flex justify-content-between text-center">
+
+                                    <!-- ASSIGNED -->
+
+                                    <div>
+
+                                        <div
+                                            class="rounded-circle
+                                            <%= ["assigned","picked_up","in_transit","delivered"]
+                                                .includes(delivery.status)
+                                                ? "bg-success text-white"
+                                                : "bg-light text-muted" %>"
+                                            style="width:32px;height:32px;line-height:32px;"
+                                        >
+                                            ✓
+                                        </div>
+
+                                        <small>
+                                            Assigned
+                                        </small>
+
+                                    </div>
+
+
+                                    <!-- PICKED UP -->
+
+                                    <div>
+
+                                        <div
+                                            class="rounded-circle
+                                            <%= ["picked_up","in_transit","delivered"]
+                                                .includes(delivery.status)
+                                                ? "bg-success text-white"
+                                                : "bg-light text-muted" %>"
+                                            style="width:32px;height:32px;line-height:32px;"
+                                        >
+                                            ✓
+                                        </div>
+
+                                        <small>
+                                            Pickup
+                                        </small>
+
+                                    </div>
+
+
+                                    <!-- TRANSIT -->
+
+                                    <div>
+
+                                        <div
+                                            class="rounded-circle
+                                            <%= ["in_transit","delivered"]
+                                                .includes(delivery.status)
+                                                ? "bg-success text-white"
+                                                : "bg-light text-muted" %>"
+                                            style="width:32px;height:32px;line-height:32px;"
+                                        >
+                                            ✓
+                                        </div>
+
+                                        <small>
+                                            Transit
+                                        </small>
+
+                                    </div>
+
+
+                                    <!-- DELIVERED -->
+
+                                    <div>
+
+                                        <div
+                                            class="rounded-circle
+                                            <%= delivery.status === "delivered"
+                                                ? "bg-success text-white"
+                                                : "bg-light text-muted" %>"
+                                            style="width:32px;height:32px;line-height:32px;"
+                                        >
+                                            ✓
+                                        </div>
+
+                                        <small>
+                                            Delivered
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =================================
+                                 ACTIONS
+                            ================================== -->
+
+                            <% if (delivery.status === "assigned") { %>
+
+                                <form
+                                    action="/dashboard/delivery/<%= delivery._id %>/status"
+                                    method="POST"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="picked_up"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-warning w-100"
+                                    >
+
+                                        📦 Mark as Picked Up
+
+                                    </button>
+
+                                </form>
+
+
+                            <% } else if (delivery.status === "picked_up") { %>
+
+                                <form
+                                    action="/dashboard/delivery/<%= delivery._id %>/status"
+                                    method="POST"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="in_transit"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary w-100"
+                                    >
+
+                                        🚚 Start Delivery
+
+                                    </button>
+
+                                </form>
+
+
+                            <% } else if (delivery.status === "in_transit") { %>
+
+                                <form
+                                    action="/dashboard/delivery/<%= delivery._id %>/status"
+                                    method="POST"
+                                    onsubmit="return confirm('Mark this delivery as completed?');"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="delivered"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success w-100"
+                                    >
+
+                                        ✅ Mark as Delivered
+
+                                    </button>
+
+                                </form>
+
+
+                            <% } else if (delivery.status === "delivered") { %>
+
+                                <div class="alert alert-success mb-0">
+
+                                    <div class="fw-bold">
+                                        ✅ Delivery Completed
+                                    </div>
+
+                                    <% if (delivery.deliveredAt) { %>
+
+                                        <small>
+
+                                            Delivered on:
+                                            <%= new Date(
+                                                delivery.deliveredAt
+                                            ).toLocaleString() %>
+
+                                        </small>
+
+                                    <% } %>
+
+                                </div>
+
+
+                            <% } else { %>
+
+                                <div class="alert alert-secondary mb-0">
+
+                                    Current Status:
+                                    <strong>
+                                        <%= delivery.status
+                                            .replaceAll("_", " ") %>
+                                    </strong>
+
+                                </div>
+
+                            <% } %>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    <% } %>
+
+</div>

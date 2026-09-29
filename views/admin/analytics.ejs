@@ -1,0 +1,390 @@
+<div class="container py-5">
+
+    <!-- HEADER -->
+
+    <div class="d-flex justify-content-between align-items-center mb-5">
+
+        <div>
+
+            <h1 class="fw-bold mb-1">
+                Sustainability Analytics
+            </h1>
+
+            <p class="text-muted mb-0">
+                Monitor food redistribution and environmental impact.
+            </p>
+
+        </div>
+
+
+        <a
+            href="/dashboard/admin"
+            class="btn btn-outline-secondary">
+
+            ← Dashboard
+
+        </a>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- MAIN STATISTICS -->
+    <!-- ================================= -->
+
+    <div class="row g-4 mb-5">
+
+
+        <!-- SURPLUS -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="fs-1">
+                        🍱
+                    </div>
+
+                    <p class="text-muted mb-1">
+                        Total Surplus
+                    </p>
+
+                    <h2 class="fw-bold text-success">
+
+                        <%= analytics.totalSurplus %>
+
+                    </h2>
+
+                    <small class="text-muted">
+                        Food listings created
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- AVAILABLE -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="fs-1">
+                        🥗
+                    </div>
+
+                    <p class="text-muted mb-1">
+                        Available Surplus
+                    </p>
+
+                    <h2 class="fw-bold text-primary">
+
+                        <%= analytics.availableSurplus %>
+
+                    </h2>
+
+                    <small class="text-muted">
+                        Currently available
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DELIVERED -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="fs-1">
+                        ✅
+                    </div>
+
+                    <p class="text-muted mb-1">
+                        Delivered
+                    </p>
+
+                    <h2 class="fw-bold text-success">
+
+                        <%= analytics.deliveredRequests %>
+
+                    </h2>
+
+                    <small class="text-muted">
+                        Successful deliveries
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RATE -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="fs-1">
+                        ♻️
+                    </div>
+
+                    <p class="text-muted mb-1">
+                        Redistribution Rate
+                    </p>
+
+                    <h2 class="fw-bold text-success">
+
+                        <%= analytics.redistributionRate %>%
+
+                    </h2>
+
+                    <small class="text-muted">
+                        Requests successfully delivered
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- IMPACT -->
+    <!-- ================================= -->
+
+    <h3 class="fw-bold mb-4">
+        Environmental & Social Impact
+    </h3>
+
+
+    <div class="row g-4 mb-5">
+
+
+        <!-- MEALS -->
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body text-center py-4">
+
+                    <div class="display-5">
+                        🍽️
+                    </div>
+
+                    <h2 class="fw-bold text-success mt-3">
+
+                        <%= analytics.estimatedMeals %>
+
+                    </h2>
+
+                    <p class="text-muted mb-0">
+
+                        Estimated Meals Saved
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- WASTE -->
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body text-center py-4">
+
+                    <div class="display-5">
+                        ♻️
+                    </div>
+
+                    <h2 class="fw-bold text-success mt-3">
+
+                        <%= analytics.wastePrevented %>
+
+                    </h2>
+
+                    <p class="text-muted mb-0">
+
+                        Estimated Food Waste Prevented
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUANTITY -->
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body text-center py-4">
+
+                    <div class="display-5">
+                        📦
+                    </div>
+
+                    <h2 class="fw-bold text-primary mt-3">
+
+                        <%= analytics.deliveredQuantity %>
+
+                    </h2>
+
+                    <p class="text-muted mb-0">
+
+                        Total Delivered Quantity
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- NETWORK -->
+    <!-- ================================= -->
+
+    <h3 class="fw-bold mb-4">
+        NextBite Network
+    </h3>
+
+
+    <div class="row g-4">
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+                        🏭 Kitchens
+                    </h5>
+
+                    <h2 class="text-success fw-bold">
+
+                        <%= analytics.activeKitchens %>
+
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Active food providers
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+                        🏢 NGOs
+                    </h5>
+
+                    <h2 class="text-primary fw-bold">
+
+                        <%= analytics.activeNGOs %>
+
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Redistribution partners
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+                        🚚 Delivery
+                    </h5>
+
+                    <h2 class="text-warning fw-bold">
+
+                        <%= analytics.activeDelivery %>
+
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Active delivery partners
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- NOTE -->
+    <!-- ================================= -->
+
+    <div class="alert alert-info mt-5">
+
+        <strong>Analytics Note:</strong>
+
+        Current meal and waste-prevention figures
+        are project-level estimates based on delivered
+        quantity. Later, we will replace these
+        assumptions with food-category-specific
+        AI calculations.
+
+    </div>
+
+</div>
