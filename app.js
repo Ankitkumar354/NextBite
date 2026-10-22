@@ -20,6 +20,7 @@ const notificationRoutes =
     require("./routes/notificationRoutes");
     const profileRoutes =
     require("./routes/profileRoutes");
+const { verifyCertificate } = require("./controllers/impactController");
 
 const app = express();
 
@@ -218,11 +219,7 @@ app.use(
     notificationRoutes
 );
 
-
-// ===============================
-// 404 ROUTE
-// ALWAYS LAST
-// ===============================
+app.get("/verify/:certificateId", verifyCertificate);
 
 app.use((req, res) => {
 
@@ -231,6 +228,5 @@ app.use((req, res) => {
     });
 
 });
-
 
 module.exports = app;

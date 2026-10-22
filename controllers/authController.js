@@ -6,11 +6,8 @@ const jwt = require("jsonwebtoken");
 // ========================================
 // REGISTER
 // ========================================
-
 const registerUser = async (req, res) => {
-
     try {
-
         const {
             name,
             email,
@@ -19,32 +16,70 @@ const registerUser = async (req, res) => {
             role,
             organizationName,
             address,
-            city
+            city,
+            latitude,
+            longitude
         } = req.body;
-
 
         // Check existing user
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-
             return res.status(400).send(
                 "User with this email already exists."
             );
-
         }
 
+        // Convert coordinates to numbers
+        let parsedLatitude = null;
+        let parsedLongitude = null;
+
+        if (role === "ngo") {
+            if (latitude !== "" && latitude !== undefined) {
+                parsedLatitude = Number(latitude);
+            }
+
+            if (longitude !== "" && longitude !== undefined) {
+                parsedLongitude = Number(longitude);
+            }
+
+            // Validate coordinates when supplied
+            if (
+                (parsedLatitude !== null &&
+                    (!Number.isFinite(parsedLatitude) ||
+                        parsedLatitude < -90 ||
+                        parsedLatitude > 90)) ||
+                (parsedLongitude !== null &&
+                    (!Number.isFinite(parsedLongitude) ||
+                        parsedLongitude < -180 ||
+                        parsedLongitude > 180))
+            ) {
+                return res.status(400).send(
+                    "Invalid latitude or longitude."
+                );
+            }
+
+            // Both coordinates must be provided together
+            if (
+                (parsedLatitude === null) !==
+                (parsedLongitude === null)
+            ) {
+                return res.status(400).send(
+                    "Please provide both latitude and longitude."
+                );
+            }
+            if (parsedLatitude === null || parsedLongitude === null) {
+                return res.status(400).send(
+                    "NGO location is required. Use 'Use my current location' or 'Find from address'."
+                );
+            }
+        }
 
         // Hash password
-        const hashedPassword = await bcrypt.hash(
-            password,
-            12
-        );
-
+        const hashedPassword = await bcrypt.hash(password, 12);
 
         // Create user
         const user = await User.create({
-
             name,
             email,
             phone,
@@ -52,29 +87,25 @@ const registerUser = async (req, res) => {
             role,
             organizationName,
             address,
-            city
-
+            city,
+            ...(role === "ngo"
+                ? {
+                    latitude: parsedLatitude,
+                    longitude: parsedLongitude
+                }
+                : {})
         });
 
-
-        console.log(
-            `✅ User registered: ${user.email}`
-        );
-
+        console.log(`User registered: ${user.email}`);
 
         res.redirect("/login");
 
     } catch (error) {
+        console.error("Registration error:", error.message);
 
-        console.error(
-            "Registration error:",
-            error.message
-        );
-
-        res.status(500).send(
-            "Registration failed."
-        );
+        res.status(500).send("Registration failed.");
     }
+
 };
 
 

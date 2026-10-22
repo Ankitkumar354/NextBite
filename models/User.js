@@ -54,6 +54,16 @@ const userSchema = new mongoose.Schema(
             trim: true
         },
 
+        latitude: {
+            type: Number,
+            default: null
+        },
+
+        longitude: {
+            type: Number,
+            default: null
+        },
+
         isVerified: {
             type: Boolean,
             default: false

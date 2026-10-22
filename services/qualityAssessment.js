@@ -4,8 +4,7 @@ const path = require('path');
 exports.analyzeFoodImage = (imagePath) => {
     return new Promise((resolve, reject) => {
         const scriptPath = path.join(__dirname, '../ml/assess_quality.py');
-        const pythonPath = path.join(__dirname, '../venv/Scripts/python.exe');
-
+      const pythonPath = process.env.PYTHON_PATH || 'python3';
         const pythonProcess = spawn(pythonPath, [scriptPath, imagePath]);
 
         let outputData = '';

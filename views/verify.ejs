@@ -1,0 +1,34 @@
+<div class="container py-5" style="max-width: 640px;">
+
+    <h1 class="fw-bold mb-4">Certificate Verification</h1>
+
+    <% if (!certificate) { %>
+
+        <div class="alert alert-danger">
+            ❌ Ye certificate ID hamare records mein nahi mila.
+        </div>
+
+    <% } else { %>
+
+        <div class="alert alert-success">
+            ✅ Ye certificate NextBite ke records mein maujood hai.
+        </div>
+
+        <div class="card border-0 shadow-sm"><div class="card-body">
+            <p class="mb-1"><strong>ID:</strong> <%= certificate.certificateId %></p>
+            <p class="mb-1"><strong>Kitchen:</strong>
+                <%= certificate.kitchen?.organizationName || certificate.kitchen?.name %>
+                <%= certificate.kitchen?.city ? "(" + certificate.kitchen.city + ")" : "" %>
+            </p>
+            <p class="mb-1"><strong>Period:</strong>
+                <%= new Date(certificate.periodStart).toLocaleDateString("en-IN") %> -
+                <%= new Date(certificate.periodEnd).toLocaleDateString("en-IN") %>
+            </p>
+            <p class="mb-1"><strong>Deliveries:</strong> <%= certificate.deliveries %></p>
+            <p class="mb-1"><strong>Food saved (est.):</strong> <%= certificate.foodKg %> kg</p>
+            <p class="mb-0"><strong>CO₂e avoided (est.):</strong> <%= certificate.co2eKg %> kg</p>
+        </div></div>
+
+    <% } %>
+
+</div>

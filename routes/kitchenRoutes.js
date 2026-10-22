@@ -15,6 +15,12 @@ const {
     rejectFoodRequest
 } = require("../controllers/kitchenController");
 
+const {
+    getImpactPage,
+    createCertificate,
+    viewCertificate
+} = require("../controllers/impactController");
+
 router.get(
     "/",
     requireAuth,
@@ -63,6 +69,17 @@ router.post(
     requireAuth,
     requireRole("kitchen"),
     rejectFoodRequest
+);
+
+router.get("/impact", requireAuth, requireRole("kitchen"), getImpactPage);
+
+router.post("/impact/certificates", requireAuth, requireRole("kitchen"), createCertificate);
+
+router.get(
+    "/impact/certificates/:certificateId",
+    requireAuth,
+    requireRole("kitchen"),
+    viewCertificate
 );
 
 

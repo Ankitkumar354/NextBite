@@ -2,12 +2,9 @@ const FoodRequest = require("../models/FoodRequest");
 const User = require("../models/User");
 const SurplusFood = require("../models/SurplusFood");
 const Notification = require("../models/Notification");
+const DeliveryLocation = require("../models/DeliveryLocation");
 
-
-// ========================================
 // ADMIN DELIVERY ASSIGNMENT PAGE
-// ========================================
-
 const getDeliveryAssignments = async (req, res) => {
 
     try {
@@ -69,169 +66,169 @@ const getDeliveryAssignments = async (req, res) => {
 // ASSIGN DELIVERY
 // ========================================
 const assignDelivery = async (req, res) => {
-try {
+    try {
 
 
-    const { deliveryPersonId } = req.body;
+        const { deliveryPersonId } = req.body;
 
 
-    // ===============================
-    // CHECK REQUEST
-    // ===============================
+        // ===============================
+        // CHECK REQUEST
+        // ===============================
 
-    const request = await FoodRequest
-        .findById(req.params.id)
-        .populate(
-            "surplusFood",
-            "foodName unit"
+        const request = await FoodRequest
+            .findById(req.params.id)
+            .populate(
+                "surplusFood",
+                "foodName unit"
+            );
+
+
+        if (!request) {
+            return res.status(404).send(
+                "Food request not found."
+            );
+        }
+
+
+        // ===============================
+        // CHECK REQUEST STATUS
+        // ===============================
+
+        if (request.status !== "approved") {
+            return res.status(400).send(
+                `Only approved requests can be assigned. Current status: ${request.status}`
+            );
+        }
+
+
+        // ===============================
+        // CHECK DELIVERY PERSON ID
+        // ===============================
+
+        if (!deliveryPersonId) {
+            return res.status(400).send(
+                "Delivery person is required."
+            );
+        }
+
+
+        // ===============================
+        // FIND DELIVERY PERSON
+        // ===============================
+
+        const deliveryPerson = await User.findById(
+            deliveryPersonId
         );
 
 
-    if (!request) {
-        return res.status(404).send(
-            "Food request not found."
+        if (!deliveryPerson) {
+            return res.status(404).send(
+                "Delivery person user not found."
+            );
+        }
+
+
+        // ===============================
+        // CHECK ROLE
+        // ===============================
+
+        if (deliveryPerson.role !== "delivery") {
+
+            return res.status(400).send(
+                `Selected user role is "${deliveryPerson.role}", not "delivery".`
+            );
+
+        }
+
+
+        // ===============================
+        // CHECK ACTIVE STATUS
+        // ===============================
+
+        if (!deliveryPerson.isActive) {
+
+            return res.status(400).send(
+                "Selected delivery person is inactive."
+            );
+
+        }
+
+
+        // ===============================
+        // ASSIGN DELIVERY
+        // ===============================
+
+        request.deliveryPerson =
+            deliveryPerson._id;
+
+        request.assignedAt =
+            new Date();
+
+        request.status =
+            "assigned";
+
+
+        await request.save();
+
+
+        // ===============================
+        // NOTIFY DELIVERY PERSON
+        // ===============================
+
+        await Notification.create({
+
+            recipient: deliveryPerson._id,
+
+            type: "delivery_assigned",
+
+            title: "New Delivery Assigned",
+
+            message:
+                `You have been assigned a delivery for ` +
+                `${request.quantityRequested} ` +
+                `${request.surplusFood?.unit || ""} of ` +
+                `${request.surplusFood?.foodName || "food"}. ` +
+                `Please check your delivery dashboard.`,
+
+            relatedRequest: request._id,
+
+            relatedSurplus:
+                request.surplusFood?._id || null
+
+        });
+
+
+        console.log(
+            "✅ Delivery assigned successfully."
         );
+
+        console.log(
+            "🔔 Delivery notification created."
+        );
+
+
+        // ===============================
+        // REDIRECT
+        // ===============================
+
+        res.redirect(
+            "/dashboard/admin/delivery-assignments"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Assign delivery error:",
+            error
+        );
+
+        res.status(500).send(
+            "Unable to assign delivery."
+        );
+
     }
-
-
-    // ===============================
-    // CHECK REQUEST STATUS
-    // ===============================
-
-    if (request.status !== "approved") {
-        return res.status(400).send(
-            `Only approved requests can be assigned. Current status: ${request.status}`
-        );
-    }
-
-
-    // ===============================
-    // CHECK DELIVERY PERSON ID
-    // ===============================
-
-    if (!deliveryPersonId) {
-        return res.status(400).send(
-            "Delivery person is required."
-        );
-    }
-
-
-    // ===============================
-    // FIND DELIVERY PERSON
-    // ===============================
-
-    const deliveryPerson = await User.findById(
-        deliveryPersonId
-    );
-
-
-    if (!deliveryPerson) {
-        return res.status(404).send(
-            "Delivery person user not found."
-        );
-    }
-
-
-    // ===============================
-    // CHECK ROLE
-    // ===============================
-
-    if (deliveryPerson.role !== "delivery") {
-
-        return res.status(400).send(
-            `Selected user role is "${deliveryPerson.role}", not "delivery".`
-        );
-
-    }
-
-
-    // ===============================
-    // CHECK ACTIVE STATUS
-    // ===============================
-
-    if (!deliveryPerson.isActive) {
-
-        return res.status(400).send(
-            "Selected delivery person is inactive."
-        );
-
-    }
-
-
-    // ===============================
-    // ASSIGN DELIVERY
-    // ===============================
-
-    request.deliveryPerson =
-        deliveryPerson._id;
-
-    request.assignedAt =
-        new Date();
-
-    request.status =
-        "assigned";
-
-
-    await request.save();
-
-
-    // ===============================
-    // NOTIFY DELIVERY PERSON
-    // ===============================
-
-    await Notification.create({
-
-        recipient: deliveryPerson._id,
-
-        type: "delivery_assigned",
-
-        title: "New Delivery Assigned",
-
-        message:
-            `You have been assigned a delivery for ` +
-            `${request.quantityRequested} ` +
-            `${request.surplusFood?.unit || ""} of ` +
-            `${request.surplusFood?.foodName || "food"}. ` +
-            `Please check your delivery dashboard.`,
-
-        relatedRequest: request._id,
-
-        relatedSurplus:
-            request.surplusFood?._id || null
-
-    });
-
-
-    console.log(
-        "✅ Delivery assigned successfully."
-    );
-
-    console.log(
-        "🔔 Delivery notification created."
-    );
-
-
-    // ===============================
-    // REDIRECT
-    // ===============================
-
-    res.redirect(
-        "/dashboard/admin/delivery-assignments"
-    );
-
-
-} catch (error) {
-
-    console.error(
-        "Assign delivery error:",
-        error
-    );
-
-    res.status(500).send(
-        "Unable to assign delivery."
-    );
-
-}
 
 
 };
@@ -600,7 +597,7 @@ const getAnalytics = async (req, res) => {
             totalRequests > 0
                 ? Math.round(
                     (deliveredRequests /
-                    totalRequests) * 100
+                        totalRequests) * 100
                 )
                 : 0;
 
@@ -668,6 +665,75 @@ const getAnalytics = async (req, res) => {
 // assignDelivery
 
 
+// ========================================
+// ADMIN → LIVE COURIER MAP (PAGE)
+// ========================================
+
+const getCourierMap = (req, res) => {
+    res.render("admin/courier-map", {
+        title: "Live Courier Locations"
+    });
+};
+
+
+// ========================================
+// ADMIN → LIVE COURIER LOCATIONS (JSON)
+// ========================================
+
+const getCourierLocations = async (req, res) => {
+    try {
+        // Sirf wo couriers jinki abhi active delivery hai
+        const activeRequests = await FoodRequest.find({
+            deliveryPerson: { $ne: null },
+            status: { $in: ["assigned", "picked_up", "in_transit"] }
+        })
+            .populate("deliveryPerson", "name phone")
+            .populate("ngo", "name organizationName")
+            .populate("surplusFood", "foodName")
+            .lean();
+
+        const courierIds = [
+            ...new Set(activeRequests.map(r => String(r.deliveryPerson._id)))
+        ];
+
+        const locations = await DeliveryLocation.find({
+            deliveryPerson: { $in: courierIds }
+        }).lean();
+
+        const locationByCourier = new Map(
+            locations.map(l => [String(l.deliveryPerson), l])
+        );
+
+        const couriers = activeRequests
+            .map(r => {
+                const loc = locationByCourier.get(String(r.deliveryPerson._id));
+                if (!loc) return null;      // abhi tak GPS nahi mila
+
+                return {
+                    requestId: r._id,
+                    courierName: r.deliveryPerson.name,
+                    courierPhone: r.deliveryPerson.phone || "",
+                    food: r.surplusFood?.foodName || "Food",
+                    ngo: r.ngo?.organizationName || r.ngo?.name || "NGO",
+                    status: r.status,
+                    latitude: loc.latitude,
+                    longitude: loc.longitude,
+                    updatedAt: loc.updatedAt
+                };
+            })
+            .filter(Boolean);
+
+        res.json({ success: true, couriers });
+
+    } catch (error) {
+        console.error("Courier locations error:", error.message);
+        res.status(500).json({
+            success: false,
+            message: "Unable to fetch courier locations"
+        });
+    }
+};
+
 
 module.exports = {
     getDashboard,
@@ -676,5 +742,7 @@ module.exports = {
     getUsers,
     toggleUserStatus,
     getFoodRequests,
-    getAnalytics
+    getAnalytics,
+    getCourierMap,
+    getCourierLocations
 };

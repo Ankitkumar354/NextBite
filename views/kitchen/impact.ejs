@@ -1,0 +1,80 @@
+<div class="container py-5">
+
+    <div class="mb-4">
+        <h1 class="fw-bold">🌱 Environmental Impact</h1>
+        <p class="text-muted">Aapke delivered surplus food se bachi CO₂ emissions (estimate).</p>
+    </div>
+
+    <% if (error) { %>
+        <div class="alert alert-warning"><%= error %></div>
+    <% } %>
+
+    <!-- Period -->
+    <form method="GET" action="/dashboard/kitchen/impact" class="row g-2 align-items-end mb-4">
+        <div class="col-auto">
+            <label class="form-label">From</label>
+            <input type="date" name="from" value="<%= from %>" class="form-control">
+        </div>
+        <div class="col-auto">
+            <label class="form-label">To</label>
+            <input type="date" name="to" value="<%= to %>" class="form-control">
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-primary">Show</button>
+        </div>
+    </form>
+
+    <!-- Stats -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100"><div class="card-body">
+                <p class="text-muted mb-1">Delivered donations</p>
+                <h2 class="fw-bold"><%= impact.deliveries %></h2>
+            </div></div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100"><div class="card-body">
+                <p class="text-muted mb-1">Food saved (est.)</p>
+                <h2 class="fw-bold text-success"><%= impact.foodKg %> kg</h2>
+            </div></div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100"><div class="card-body">
+                <p class="text-muted mb-1">CO₂e avoided (est.)</p>
+                <h2 class="fw-bold text-primary"><%= impact.co2eKg %> kg</h2>
+            </div></div>
+        </div>
+    </div>
+
+    <!-- Generate -->
+    <form method="POST" action="/dashboard/kitchen/impact/certificates" class="mb-5">
+        <input type="hidden" name="from" value="<%= from %>">
+        <input type="hidden" name="to" value="<%= to %>">
+        <button class="btn btn-success" <%= impact.deliveries === 0 ? "disabled" : "" %>>
+            📜 Generate Certificate for this period
+        </button>
+        <% if (impact.deliveries === 0) { %>
+            <small class="text-muted ms-2">Is period mein koi delivered donation nahi hai.</small>
+        <% } %>
+    </form>
+
+    <!-- Past certificates -->
+    <h4 class="fw-bold mb-3">My Certificates</h4>
+
+    <% if (certificates.length === 0) { %>
+        <p class="text-muted">Abhi koi certificate nahi bana.</p>
+    <% } else { %>
+        <div class="list-group">
+            <% certificates.forEach(c => { %>
+                <a class="list-group-item list-group-item-action"
+                   href="/dashboard/kitchen/impact/certificates/<%= c.certificateId %>">
+                    <strong><%= c.certificateId %></strong> ·
+                    <%= new Date(c.periodStart).toLocaleDateString("en-IN") %> -
+                    <%= new Date(c.periodEnd).toLocaleDateString("en-IN") %> ·
+                    <%= c.co2eKg %> kg CO₂e
+                </a>
+            <% }) %>
+        </div>
+    <% } %>
+
+</div>
